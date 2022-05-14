@@ -3,7 +3,7 @@ armorpaint Compiled
 ArmorPaint Compiled is what you think it is, a compiled version of ArmorPaint, ready to be downloaded and used.
 This is a compiled source version of ArmorPaint, available at the original repo.
 
-To download it, click [here](google.com), download the latest version, extract it and run ArmorPaint.exe.
+To download it, click [here](https://github.com/lmoreloss/armorpaintCompiled/releases), download the latest version, extract it and run ArmorPaint.exe.
 
 I do not claim any authorship or copyright over ArmorPaint, I just compiled the program :).
 
