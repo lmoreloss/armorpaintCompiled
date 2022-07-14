@@ -110,7 +110,7 @@ class BoxPreferences {
 							});
 						}
 						if (ui.button(tr("Import..."), Left)) {
-							UIFiles.show("arm", false, false, function(path: String) {
+							UIFiles.show("json", false, false, function(path: String) {
 								Data.getBlob(path, function(b: kha.Blob) {
 									var raw = Json.parse(b.toString());
 									iron.App.notifyOnInit(function() {
@@ -566,7 +566,7 @@ plugin.drawUI = function(ui) {
 								iron.data.Data.getBlob("plugins/" + f, function(blob: kha.Blob) {
 									TabScript.hscript.text = blob.toString();
 									iron.data.Data.deleteBlob("plugins/" + f);
-									Console.info("Script opened");
+									Console.info(tr("Script opened"));
 								});
 
 							}
