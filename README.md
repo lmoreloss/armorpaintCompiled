@@ -58,10 +58,10 @@ cp -a build/krom/ armorcore/Deployment
 **Android** *wip*
 ```bash
 git apply armorcore/patch/android_document_picker.diff --directory=armorcore/Kinc
-armorcore/Kinc/make android --from armorcore -g opengl
+armorcore/Kinc/make --from armorcore -g opengl android
 cp -r build/krom/* build/ArmorPaint/app/src/main/assets/
 # Manual tweaking is required for now:
-# https://github.com/armory3d/armorcore/blob/master/kincfile.js#L68
+# https://github.com/armory3d/armorcore/blob/master/kfile.js#L136
 # Open generated Android Studio project at `build/ArmorPaint`
 # Build for device
 ```
@@ -71,10 +71,10 @@ cp -r build/krom/* build/ArmorPaint/app/src/main/assets/
 git clone https://github.com/armory3d/armorpaint_plugins Libraries/plugins
 git apply armorcore/patch/ios_document_picker.diff --directory=armorcore/Kinc
 git apply armorcore/patch/metal_depth.diff --directory=armorcore/Kinc
-armorcore/Kinc/make ios --from armorcore -g metal
+armorcore/Kinc/make --from armorcore -g metal ios
 cp -a build/krom/ armorcore/Deployment
 # Open generated Xcode project `build/ArmorPaint.xcodeproj`
-# Set iOS Deployment Target to 11.0
+# Set iOS Deployment Target to 14.0
 # Build for device in release mode
 ```
 

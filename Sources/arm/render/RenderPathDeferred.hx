@@ -11,7 +11,7 @@ class RenderPathDeferred {
 
 	public static var path: RenderPath;
 
-	#if rp_voxelao
+	#if rp_voxels
 	static var voxels = "voxels";
 	static var voxelsLast = "voxels";
 	public static var voxelFrame = 0;
@@ -172,7 +172,7 @@ class RenderPathDeferred {
 			path.loadShader("shader_datas/motion_blur_veloc_pass/motion_blur_veloc_pass");
 		}
 		#end
-		#if rp_voxelao
+		#if rp_voxels
 		{
 			Inc.initGI();
 			path.loadShader("shader_datas/deferred_light/deferred_light_voxel");
@@ -266,7 +266,7 @@ class RenderPathDeferred {
 		}
 
 		// Voxels
-		#if rp_voxelao
+		#if rp_voxels
 		if (Config.raw.rp_gi != false)
 		{
 			var voxelize = path.voxelize() && ddirty > 0 && taaFrame > 0;
@@ -313,7 +313,7 @@ class RenderPathDeferred {
 			path.bindTarget("empty_white", "ssaotex");
 		}
 		var voxelao_pass = false;
-		#if rp_voxelao
+		#if rp_voxels
 		if (Config.raw.rp_gi != false)
 		{
 			voxelao_pass = true;
@@ -555,6 +555,12 @@ class RenderPathDeferred {
 				t.scale = Inc.getSuperSampling();
 				path.createRenderTarget(t);
 			}
+
+			#if kha_metal
+			// TODO: Fix depth attach for gbuffer0_copy on metal
+			// Use resize to re-create buffers from scratch for now
+			path.resize();
+			#end
 		}
 	}
 
@@ -563,7 +569,7 @@ class RenderPathDeferred {
 		path.bindTarget("gbuffer0_copy", "tex0");
 		path.bindTarget("gbuffer1_copy", "tex1");
 		path.bindTarget("gbuffer2_copy", "tex2");
-		path.drawShader("shader_datas/copy_mrt3_pass/copy_mrt3_pass");
+		path.drawShader("shader_datas/copy_mrt3_pass/copy_mrt3RGBA64_pass");
 	}
 
 	static function drawSplit() {

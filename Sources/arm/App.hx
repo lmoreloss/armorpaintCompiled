@@ -11,6 +11,7 @@ import zui.Nodes;
 import iron.Scene;
 import iron.data.Data;
 import iron.system.Input;
+import iron.system.Time;
 import arm.ui.UISidebar;
 import arm.ui.UIToolbar;
 import arm.ui.UINodes;
@@ -57,6 +58,7 @@ class App {
 	public static var dragRect: TRect = null;
 	public static var dragOffX = 0.0;
 	public static var dragOffY = 0.0;
+	public static var dragStart = 0.0;
 	public static var dropX = 0.0;
 	public static var dropY = 0.0;
 	public static var font: Font = null;
@@ -197,11 +199,11 @@ class App {
 
 					Args.run();
 
-					#if arm_touchui
-					if (Config.raw.recent_projects.length > 0) {
-						arm.ui.BoxProjects.show();
+					if (Config.raw.touch_ui) {
+						if (Config.raw.recent_projects.length > 0) {
+							arm.ui.BoxProjects.show();
+						}
 					}
-					#end
 				});
 			});
 		});
@@ -370,6 +372,31 @@ class App {
 		}
 
 		var hasDrag = dragAsset != null || dragMaterial != null || dragLayer != null || dragFile != null || dragSwatch != null;
+
+		if (Config.raw.touch_ui) {
+			// Touch and hold to activate dragging
+			if (dragStart < 0.2) {
+				if (hasDrag && mouse.down()) dragStart += Time.realDelta;
+				else dragStart = 0;
+				hasDrag = false;
+			}
+			if (mouse.released()) {
+				dragStart = 0;
+			}
+			var moved = Math.abs(mouse.movementX) > 1 && Math.abs(mouse.movementY) > 1;
+			if ((mouse.released() || moved) && !hasDrag) {
+				dragAsset = null;
+				dragMaterial = null;
+				dragSwatch = null;
+				dragLayer = null;
+				dragFile = null;
+				dragFileIcon = null;
+				isDragging = false;
+			}
+			// Disable touch scrolling while dragging is active
+			Zui.touchScroll = !isDragging;
+		}
+
 		if (hasDrag && (mouse.movementX != 0 || mouse.movementY != 0)) {
 			isDragging = true;
 		}
@@ -388,7 +415,7 @@ class App {
 			var inNodes = UINodes.inst.show &&
 						  mx > UINodes.inst.wx && mx < UINodes.inst.wx + UINodes.inst.ww &&
 						  my > UINodes.inst.wy && my < UINodes.inst.wy + UINodes.inst.wh;
-			var inSwatches = UIStatus.inst.statustab.position == 4 && 
+			var inSwatches = UIStatus.inst.statustab.position == 4 &&
 						  mx > iron.App.x() && mx < iron.App.x() + System.windowWidth() - UIToolbar.inst.toolbarw - Config.raw.layout[LayoutSidebarW] &&
 						  my > System.windowHeight() - Config.raw.layout[LayoutStatusH];
 
@@ -621,7 +648,7 @@ class App {
 		}
 
 		var usingMenu = UIMenu.show && mouse.y > UIHeader.inst.headerh;
-		uiEnabled = !UIBox.show && !usingMenu;
+		uiEnabled = !UIBox.show && !usingMenu && !isComboSelected();
 		if (UIBox.show) UIBox.render(g);
 		if (UIMenu.show) UIMenu.render(g);
 
@@ -771,5 +798,10 @@ class App {
 		raw.layer_res = Res2048;
 		raw.dilate = DilateInstant;
 		raw.dilate_radius = 2;
+		#if (krom_android || krom_ios)
+		raw.touch_ui = true;
+		#else
+		raw.touch_ui = false;
+		#end
 	}
 }

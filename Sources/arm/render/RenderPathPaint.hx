@@ -114,6 +114,7 @@ class RenderPathPaint {
 		}
 
 		path.loadShader("shader_datas/copy_mrt3_pass/copy_mrt3_pass");
+		path.loadShader("shader_datas/copy_mrt3_pass/copy_mrt3RGBA64_pass");
 		path.loadShader("shader_datas/dilate_pass/dilate_pass");
 	}
 
@@ -260,14 +261,14 @@ class RenderPathPaint {
 				}
 			}
 			else {
-				#if rp_voxelao
+				#if rp_voxels
 				if (Context.tool == ToolBake && Context.bakeType == BakeAO) {
 					if (initVoxels) {
 						initVoxels = false;
 						// Init voxel texture
 						var rp_gi = Config.raw.rp_gi;
 						Config.raw.rp_gi = true;
-						#if rp_voxelao
+						#if rp_voxels
 						Inc.initGI();
 						#end
 						Config.raw.rp_gi = rp_gi;
@@ -310,7 +311,7 @@ class RenderPathPaint {
 					path.bindTarget("gbuffer0", "gbuffer0");
 				}
 				path.bindTarget("texpaint_blend1", "paintmask");
-				#if rp_voxelao
+				#if rp_voxels
 				if (Context.tool == ToolBake && Context.bakeType == BakeAO) {
 					path.bindTarget("voxels", "voxels");
 				}

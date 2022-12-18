@@ -85,11 +85,6 @@ else if (process.platform === "darwin") {
 	project.addDefine("kha_darwin");
 }
 
-if (android || ios) {
-	project.addDefine("arm_touchui"); // Use touch friendly UI
-	project.addDefine("zui_touchui");
-}
-
 if (debug) {
 	project.addDefine("arm_debug");
 	project.addParameter("--times");
@@ -134,7 +129,7 @@ else if (ios) {
 }
 
 if (process.platform !== "darwin" && !raytrace && !android && !ios) {
-	project.addDefine("rp_voxelao");
+	project.addDefine("rp_voxels");
 	project.addDefine("arm_voxelgi_revox");
 
 	if (process.platform === "win32" && win_hlsl) {

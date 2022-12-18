@@ -847,6 +847,9 @@ class UINodes {
 					menuCategory = i;
 					popupX = wx + ui._x;
 					popupY = wy + ui._y;
+					if (Config.raw.touch_ui) {
+						showMenuFirst = true;
+					}
 				}
 				if (i < cats.length - 1) {
 					ui._x += ew + 3;
@@ -1105,18 +1108,19 @@ class UINodes {
 	}
 
 	static function menuButton(ui: Zui, text: String, label = ""): Bool {
-		#if arm_touchui
-		label = "";
-		#end
+		if (Config.raw.touch_ui) {
+			label = "";
+		}
 		return ui.button(Config.buttonSpacing + text, Config.buttonAlign, label);
 	}
 
 	static function menuSeparator(ui: Zui) {
 		ui._y++;
-		#if arm_touchui
-		ui.fill(0, 0, ui._w / ui.SCALE(), 1, ui.t.ACCENT_SELECT_COL);
-		#else
-		ui.fill(22, 0, ui._w / ui.SCALE() - 22, 1, ui.t.ACCENT_SELECT_COL);
-		#end
+		if (Config.raw.touch_ui) {
+			ui.fill(0, 0, ui._w / ui.SCALE(), 1, ui.t.ACCENT_SELECT_COL);
+		}
+		else {
+			ui.fill(22, 0, ui._w / ui.SCALE() - 22, 1, ui.t.ACCENT_SELECT_COL);
+		}
 	}
 }
